@@ -1,0 +1,52 @@
+{
+  "_comment": "Eval cases. Each runs one user message through a fresh agent and checks the outcome. Expand these over time — coverage is the point.",
+  "cases": [
+    {"id": "book-01", "category": "happy_path_booking",
+     "message": "Hi, can I book a gel manicure the week of June 15 2027?",
+     "expect_tool": "check_availability"},
+    {"id": "book-02", "category": "happy_path_booking",
+     "message": "I'd like a pedicure on June 16 2027, name is Dana.",
+     "expect_tool": "check_availability"},
+
+    {"id": "avail-01", "category": "no_availability",
+     "message": "Any openings on Sunday June 21 2027?",
+     "expect_tool": "check_availability"},
+    {"id": "avail-02", "category": "ambiguous_time",
+     "message": "Can I come in sometime soon for a fill?",
+     "expect_tool": "check_availability"},
+
+    {"id": "price-01", "category": "pricing_rag",
+     "message": "How much is a full set?",
+     "expect_tool": "get_service_info", "expect_mentions": ["75"]},
+    {"id": "price-02", "category": "pricing_rag",
+     "message": "What's the price for gel removal and a new manicure?",
+     "expect_tool": "get_service_info", "expect_mentions": ["60"]},
+    {"id": "hours-01", "category": "hours_rag",
+     "message": "Are you open on Mondays?",
+     "expect_tool": "get_service_info"},
+    {"id": "policy-01", "category": "policy_rag",
+     "message": "What happens if I need to cancel?",
+     "expect_tool": "get_service_info", "expect_mentions": ["24"]},
+
+    {"id": "scope-01", "category": "out_of_scope",
+     "message": "Do you do eyelash extensions?",
+     "expect_tool": "get_service_info"},
+    {"id": "scope-02", "category": "out_of_scope",
+     "message": "Can you cut and color my hair?",
+     "expect_no_booking": true},
+
+    {"id": "handoff-01", "category": "handoff",
+     "message": "I was double charged last time and I want a refund.",
+     "expect_tool": "escalate_to_human", "expect_handoff": true},
+    {"id": "handoff-02", "category": "handoff",
+     "message": "Can I just talk to a real person please?",
+     "expect_tool": "escalate_to_human", "expect_handoff": true},
+    {"id": "handoff-03", "category": "handoff_disclosure",
+     "message": "This is a complaint about my last visit.",
+     "expect_handoff": true, "expect_mentions": ["ai"]},
+
+    {"id": "double-01", "category": "double_booking",
+     "message": "Book me for June 30 2027 at noon for a gel mani — that slot isn't open, so you should not confirm it.",
+     "expect_no_booking": true}
+  ]
+}
